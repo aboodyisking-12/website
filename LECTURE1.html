@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Exam - 50 MCQ Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .progress-container {
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 0 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 2%;
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .question-container {
+            padding: 40px;
+            min-height: 400px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .category-badge {
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 18px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover:not(.disabled) {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .option-letter {
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .option.correct {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+
+        .option.correct .option-letter {
+            background: #10b981;
+        }
+
+        .option.wrong {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+
+        .option.wrong .option-letter {
+            background: #ef4444;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback.correct {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .feedback.wrong {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .feedback-icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        .navigation {
+            padding: 30px 40px;
+            background: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-prev {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-submit {
+            background: #10b981;
+            color: white;
+            flex: 1;
+        }
+
+        .results {
+            display: none;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .results h2 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: 10px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+        }
+
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card.correct h3 { color: #10b981; }
+        .stat-card.wrong h3 { color: #ef4444; }
+        .stat-card.unanswered h3 { color: #f59e0b; }
+
+        .review-section {
+            margin-top: 30px;
+            text-align: left;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .review-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px 0;
+            z-index: 10;
+        }
+
+        .review-item {
+            background: #f9fafb;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ef4444;
+        }
+
+        .review-item.skipped {
+            border-left-color: #f59e0b;
+        }
+
+        .review-question {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .review-answer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .your-answer {
+            color: #ef4444;
+        }
+
+        .correct-answer {
+            color: #10b981;
+        }
+
+        .btn-restart {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .results-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .review-answer {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Database Exam</h1>
+            <p>Introduction to Database - Mid Term Practice</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="stats">
+                <span>Question: <span id="currentQ">1</span>/50</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="stats">
+                <span>Score: <span id="score">0</span>/50</span>
+            </div>
+        </div>
+
+        <div class="question-container" id="questionContainer">
+            <!-- Questions will be rendered here -->
+        </div>
+
+        <div class="navigation" id="navigation">
+            <button class="btn btn-prev" id="prevBtn" onclick="previousQuestion()">← Previous</button>
+            <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">Next →</button>
+            <button class="btn btn-submit" id="submitBtn" onclick="submitExam()" style="display:none;">Submit Exam</button>
+        </div>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {q: "In the Company DB schema, which SQL clause is used to filter employees by department number?", opts: ["GROUP BY", "WHERE", "HAVING", "ORDER BY"], ans: 1, cat: "SQL Queries"},
+            {q: "To increase working hours by 10% in project #50 for employees in department #34, which SQL statement is correct?", opts: ["UPDATE WorksOn SET hours = hours + 10", "UPDATE WorksOn SET hours = hours * 1.1 WHERE Pno = 50 AND Id IN (SELECT Id FROM Emp WHERE Dno = 34)", "INSERT INTO WorksOn VALUES (hours * 1.1)", "ALTER TABLE WorksOn SET hours = hours + 10%"], ans: 1, cat: "SQL Queries"},
+            {q: "To calculate total payment for an employee, which operation is needed?", opts: ["hours * hour_Rate", "hours + hour_Rate", "hours / hour_Rate", "COUNT(hours)"], ans: 0, cat: "SQL Queries"},
+            {q: "Which JOIN is needed to display employee name with department name?", opts: ["LEFT JOIN between Emp and Dept", "INNER JOIN between Emp and Dept on Dno", "RIGHT JOIN between WorksOn and Project", "CROSS JOIN between all tables"], ans: 1, cat: "SQL Queries"},
+            {q: "To filter projects located in \"Cairo\", which clause is used?", opts: ["WHERE Location = 'Cairo'", "HAVING Location = 'Cairo'", "GROUP BY Location = 'Cairo'", "ORDER BY Location = 'Cairo'"], ans: 0, cat: "SQL Queries"},
+            {q: "To display project manager name, which table must be joined with Project?", opts: ["Dept", "WorksOn", "Emp", "Dependent"], ans: 2, cat: "SQL Queries"},
+            {q: "The foreign key relationship between Project and Emp is through which attribute?", opts: ["Pno", "Pid", "Id", "Dno"], ans: 1, cat: "SQL Queries"},
+            {q: "Which aggregate function would count the number of projects an employee works on?", opts: ["SUM(Pno)", "COUNT(Pno)", "AVG(Pno)", "MAX(Pno)"], ans: 1, cat: "SQL Queries"},
+            {q: "To retrieve projects in \"Alexandria\", which table contains the Location attribute?", opts: ["Emp", "Dept", "Project", "WorksOn"], ans: 2, cat: "SQL Queries"},
+            {q: "Which SQL statement type is used to modify existing data?", opts: ["SELECT", "INSERT", "UPDATE", "CREATE"], ans: 2, cat: "SQL Queries"},
+            {q: "The Mid attribute in the Dept table refers to:", opts: ["Employee Id who is the manager", "Department number", "Middle name", "Project number"], ans: 0, cat: "SQL Queries"},
+            {q: "To calculate total payment, which tables must be joined?", opts: ["Emp and WorksOn only", "Emp, WorksOn, and Project", "Dept and Project only", "Dependent and Emp only"], ans: 1, cat: "SQL Queries"},
+            {q: "The hour_Rate attribute represents:", opts: ["Total hours worked", "Payment per working hour", "Total payment", "Department rate"], ans: 1, cat: "SQL Queries"},
+            {q: "Which attribute links WorksOn table to Emp table?", opts: ["Pno", "Id", "Dno", "hours"], ans: 1, cat: "SQL Queries"},
+            {q: "To display only projects in specific locations, which SQL keyword filters the results?", opts: ["SELECT", "FROM", "WHERE", "JOIN"], ans: 2, cat: "SQL Queries"},
+            {q: "Which relational algebra operation is used for selecting rows based on conditions?", opts: ["π (projection)", "σ (selection)", "⋈ (join)", "∪ (union)"], ans: 1, cat: "Relational Algebra"},
+            {q: "To retrieve only specific columns (name, department name, hour rate), which operation is used?", opts: ["Selection (σ)", "Projection (π)", "Union (∪)", "Difference (-)"], ans: 1, cat: "Relational Algebra"},
+            {q: "Finding employees who work in \"Finance\" department requires:", opts: ["Selection on Dept where DName = 'Finance'", "Projection of DName", "Cartesian product only", "Union of tables"], ans: 0, cat: "Relational Algebra"},
+            {q: "To find employees working in more than 4 projects, which operation is needed?", opts: ["Simple selection", "Aggregation with GROUP BY and HAVING", "Simple projection", "Natural join only"], ans: 1, cat: "Relational Algebra"},
+            {q: "The division operation in relational algebra is used for:", opts: ["Finding employees who work in ALL specified projects", "Simple selection", "Counting records", "Deleting rows"], ans: 0, cat: "Relational Algebra"},
+            {q: "To retrieve employees working in all projects managed by \"Ali Saad\", which operation is most appropriate?", opts: ["Division (÷)", "Selection (σ)", "Projection (π)", "Union (∪)"], ans: 0, cat: "Relational Algebra"},
+            {q: "Which relational algebra operation combines tuples from two relations?", opts: ["Selection", "Projection", "Join (⋈)", "Rename"], ans: 2, cat: "Relational Algebra"},
+            {q: "To filter the result \"Finance\" department, which symbol and condition is used?", opts: ["π DName = 'Finance'", "σ DName = 'Finance'", "⋈ DName = 'Finance'", "∪ DName = 'Finance'"], ans: 1, cat: "Relational Algebra"},
+            {q: "Retrieving employee name and id requires which operation?", opts: ["σ (selection) only", "π (projection) only", "Both selection and projection", "Division only"], ans: 2, cat: "Relational Algebra"},
+            {q: "Natural join (⋈) automatically joins tables based on:", opts: ["Primary keys only", "Common attributes with same names", "Foreign keys specified by user", "All attributes"], ans: 1, cat: "Relational Algebra"},
+            {q: "DBMS enforces data consistency constraints:", opts: ["True", "False", "Only for primary keys", "Only for foreign keys"], ans: 0, cat: "Database Concepts"},
+            {q: "Domain constraint in relational model is:", opts: ["Optional", "Mandatory", "Not supported", "Only for numeric data"], ans: 1, cat: "Database Concepts"},
+            {q: "SQL is only used for data retrieving:", opts: ["True", "False", "True for SELECT only", "True for queries only"], ans: 1, cat: "Database Concepts"},
+            {q: "Relational Data Model is classified as:", opts: ["Low level data model", "High level data model", "Physical data model", "None of the above"], ans: 1, cat: "Database Concepts"},
+            {q: "Database system supports data-program independence:", opts: ["True", "False", "Only in relational databases", "Only in NoSQL databases"], ans: 0, cat: "Database Concepts"},
+            {q: "DBMS stands for:", opts: ["Database Management System", "Data Binary Management System", "Digital Base Management System", "Database Manipulation System"], ans: 0, cat: "Database Concepts"},
+            {q: "The relational model organizes data into:", opts: ["Hierarchical structures", "Networks", "Tables (relations)", "Trees"], ans: 2, cat: "Database Concepts"},
+            {q: "Data consistency constraints ensure:", opts: ["Data accuracy and validity", "Faster queries", "More storage space", "Better user interface"], ans: 0, cat: "Database Concepts"},
+            {q: "Data-program independence means:", opts: ["Programs depend on data structure", "Data structure changes don't require program changes", "Programs and data are the same", "Data cannot be accessed by programs"], ans: 1, cat: "Database Concepts"},
+            {q: "SQL supports which of the following operations?", opts: ["Data retrieval only", "Data manipulation and retrieval", "Data definition, manipulation, and retrieval", "Data retrieval and deletion only"], ans: 2, cat: "Database Concepts"},
+            {q: "In the University DB, Course table's Dept_id is a:", opts: ["Primary key", "Foreign key referencing Department", "Candidate key", "Alternate key"], ans: 1, cat: "Referential Integrity"},
+            {q: "In the Section table, Course_id references which table?", opts: ["Department", "Course", "Registration", "Student"], ans: 1, cat: "Referential Integrity"},
+            {q: "In the Registration table, Sec_id is a foreign key referencing:", opts: ["Course", "Student", "Section", "Department"], ans: 2, cat: "Referential Integrity"},
+            {q: "The operation \"Insert into Course Values ('IS335', 88888, 'Database Lab', 3)\" will:", opts: ["Succeed without issues", "Violate referential integrity (Dept_id 88888 doesn't exist)", "Create a new department automatically", "Only insert the course name"], ans: 1, cat: "Referential Integrity"},
+            {q: "Updating \"Department Set Dept_id = 999 Where Dept_id = 333\" will:", opts: ["Succeed without issues", "Violate referential integrity (Course SE461 references Dept_id 333)", "Automatically update related courses", "Delete the department"], ans: 1, cat: "Referential Integrity"},
+            {q: "Deleting \"Delete From Section Where Sec_id = 77777\" will:", opts: ["Succeed without issues", "Violate referential integrity (Registration has records with Sec_id 77777)", "Delete related registrations automatically", "Only mark the section as inactive"], ans: 1, cat: "Referential Integrity"},
+            {q: "Referential integrity ensures:", opts: ["Foreign key values must exist in referenced table", "All values must be unique", "All tables must have same number of rows", "Primary keys can be null"], ans: 0, cat: "Referential Integrity"},
+            {q: "The primary key of the Course table is:", opts: ["Dept_id", "Course_name", "Course_id", "Credit"], ans: 2, cat: "Referential Integrity"},
+            {q: "The primary key of the Department table is:", opts: ["Dept_name", "Dept_id", "Both Dept_id and Dept_name", "There is no primary key"], ans: 1, cat: "Referential Integrity"},
+            {q: "The primary key of the Registration table is likely:", opts: ["Student_id only", "Sec_id only", "Combination of Student_id and Sec_id", "Grade"], ans: 2, cat: "Referential Integrity"},
+            {q: "Which integrity constraint prevents null values in primary keys?", opts: ["Referential integrity", "Domain constraint", "Entity integrity", "User-defined constraint"], ans: 2, cat: "Referential Integrity"},
+            {q: "The Credit attribute in Course table is an example of:", opts: ["Primary key", "Foreign key", "Domain constraint (valid credit values)", "Referential integrity"], ans: 2, cat: "Referential Integrity"},
+            {q: "When a foreign key references a primary key, the foreign key value must:", opts: ["Be unique", "Exist in the referenced table or be null (if allowed)", "Be greater than zero", "Be a string value"], ans: 1, cat: "Referential Integrity"},
+            {q: "Cascading delete means:", opts: ["Deleting parent record automatically deletes child records", "Delete operation is cancelled", "Only parent record is deleted", "Child records are set to null"], ans: 0, cat: "Referential Integrity"},
+            {q: "The Section table's primary key is:", opts: ["Course_id", "Sec_id", "Day", "Time"], ans: 1, cat: "Referential Integrity"}
+        ];
+
+        let curr = 0, userAns = Array(50).fill(null), score = 0, done = Array(50).fill(false);
+
+        function render() {
+            const q = questions[curr];
+            let html = `<div class="question-header"><span class="question-number">Question ${curr+1}</span><span class="category-badge">${q.cat}</span></div><div class="question-text">${q.q}</div><div class="options">`;
+            
+            q.opts.forEach((o, i) => {
+                let cls = 'option';
+                if (userAns[curr] === i) cls += ' selected';
+                if (done[curr] && i === q.ans) cls += ' correct';
+                if (done[curr] && userAns[curr] === i && i !== q.ans) cls += ' wrong';
+                if (done[curr]) cls += ' disabled';
+                html += `<div class="${cls}" onclick="select(${i})"><div class="option-letter">${String.fromCharCode(65+i)}</div><div>${o}</div></div>`;
+            });
+            
+            html += '</div>';
+            
+            if (done[curr]) {
+                const ok = userAns[curr] === q.ans;
+                html += `<div class="feedback show ${ok?'correct':'wrong'}"><span class="feedback-icon">${ok?'✓':'✗'}</span><strong>${ok?'Correct!':'Incorrect.'}</strong> The correct answer is: <strong>${String.fromCharCode(65+q.ans)}) ${q.opts[q.ans]}</strong></div>`;
+            }
+            
+            document.getElementById('questionContainer').innerHTML = html;
+            document.getElementById('prevBtn').disabled = curr === 0;
+            document.getElementById('nextBtn').style.display = curr === 49 ? 'none' : 'block';
+            document.getElementById('submitBtn').style.display = curr === 49 ? 'block' : 'none';
+        }
+
+        function select(i) {
+            if (done[curr]) return;
+            userAns[curr] = i;
+            done[curr] = true;
+            if (i === questions[curr].ans) {
+                score++;
+                document.getElementById('score').textContent = score;
+            }
+            render();
+            updateProg();
+        }
+
+        function updateProg() {
+            document.getElementById('currentQ').textContent = curr + 1;
+            document.getElementById('progressBar').style.width = ((curr+1)/50*100) + '%';
+        }
+
+        function nextQuestion() {
+            if (curr < 49) {
+                curr++;
+                render();
+                updateProg();
+            }
+        }
+
+        function previousQuestion() {
+            if (curr > 0) {
+                curr--;
+                render();
+                updateProg();
+            }
+        }
+
+        function submitExam() {
+            const wrong = done.filter((d, i) => d && userAns[i] !== questions[i].ans).length;
+            const unans = 50 - done.filter(d => d).length;
+            const pct = ((score/50)*100).toFixed(1);
+
+            document.getElementById('questionContainer').style.display = 'none';
+            document.getElementById('navigation').style.display = 'none';
+
+            let rev = '';
+            questions.forEach((q, i) => {
+                if (!done[i] || userAns[i] !== q.ans) {
+                    const skip = !done[i];
+                    rev += `<div class="review-item ${skip?'skipped':''}"><div class="review-question">Q${i+1}: ${q.q}</div><div class="review-answer"><div class="your-answer"><strong>Your answer:</strong> ${skip?'Not answered':String.fromCharCode(65+userAns[i])+') '+q.opts[userAns[i]]}</div><div class="correct-answer"><strong>Correct answer:</strong> ${String.fromCharCode(65+q.ans)}) ${q.opts[q.ans]}</div></div></div>`;
+                }
+            });
+
+            const res = document.getElementById('results');
+            res.className = 'results show';
+            res.innerHTML = `<h2>🎉 Exam Completed!</h2><div class="score-circle">${pct}%</div><div class="results-stats"><div class="stat-card correct"><h3>${score}</h3><p>Correct</p></div><div class="stat-card wrong"><h3>${wrong}</h3><p>Wrong</p></div><div class="stat-card unanswered"><h3>${unans}</h3><p>Unanswered</p></div></div>${rev?`<div class="review-section"><h3>📝 Review Your Mistakes</h3>${rev}</div>`:'<p style="color: #10b981; font-size: 1.2em; margin-top: 20px;">🌟 Perfect Score! You got all questions correct!</p>'}<button class="btn btn-restart" onclick="location.reload()">🔄 Restart Exam</button>`;
+        }
+
+        window.onload = function() {
+            render();
+            updateProg();
+        };
+    </script>
+</body>
+</html>
